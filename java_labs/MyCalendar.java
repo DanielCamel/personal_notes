@@ -7,7 +7,7 @@ public class MyCalendar {
 		MyTimer t1=new MyTimer();
 		for(int i=0; i<1000000; i++)
 			arr1.add(r1.nextInt());
-		t1.printTime("test Array");
+		t1.printTime("my Array");
 		System.out.println("size="+arr1.size());
 		MyTimer t2=new MyTimer();
 		for(int i=0; i<10000; i++)
@@ -45,5 +45,4 @@ public class MyCalendar {
 		t8.printTime("Find HashSet");
 
 	}
-
 }
