@@ -7,7 +7,11 @@ public class MyCalendar {
 		MyTimer t1=new MyTimer();
 		for(int i=0; i<1000000; i++)
 			arr1.add(r1.nextInt());
+<<<<<<< HEAD
 		t1.printTime("my Array");
+=======
+		t1.printTime("Array");
+>>>>>>> 523f1a186aaf494cb3018be3824abd12d06884d2
 		System.out.println("size="+arr1.size());
 		MyTimer t2=new MyTimer();
 		for(int i=0; i<10000; i++)

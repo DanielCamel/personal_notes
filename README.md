@@ -1,1 +1,1 @@
-Just the code for my training tasks. Don’t judge me (:
+Just code for fun :3 
