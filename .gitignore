@@ -20,7 +20,7 @@ lib64/
 parts/
 sdist/
 var/
-MNIST_data
+# MNIST_data
 *.egg-info/
 .installed.cfg
 *.egg
