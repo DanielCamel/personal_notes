@@ -68,7 +68,7 @@ docs/_build/
 target/
 
 # IPython Notebook
-.ipynb_checkpoints
+# .ipynb_checkpoints
 
 # pyenv
 .python-version
@@ -90,7 +90,7 @@ ENV/
 .ropeproject
 
 # any subfolder
-*/
+# */
 
 # any zip files
 *.zip
