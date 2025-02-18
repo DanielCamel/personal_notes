@@ -26,3 +26,4 @@ for num in range(1000):
         print(num)
                 
 print("Number of '8+9' numbers from 0 to 999:", count,"\n")
+
