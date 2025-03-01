@@ -13,13 +13,22 @@ class User {
 
     // Конструктор: создаёт нового пользователя, генерируя соль и хешируя пароль
     public User(String login, String password) throws NoSuchAlgorithmException {
-        if (!isValidPassword(password)) {
-            throw new SecurityException("Пароль не соответствует политике безопасности");
+        // если передан пустой пароль, то создается пустая соль и хеш,
+        // но не выполняется проверка пароля.
+        if (password != null && !password.isEmpty()) 
+        {
+            if (!isValidPassword(password)) {
+                throw new SecurityException("Пароль не соответствует политике безопасности");
+            }
+            this.salt = generateSalt();  // Генерируем случайную соль
+            this.passwordHash = hashPassword(password, salt);  // Хешируем пароль с солью
+        } else {
+            // Если пароль пустой, создаем пустую соль и хеш
+            this.passwordHash = new byte[0];
+            this.salt = new byte[0];
+        }   
+            this.login = login;  // Сохраняем логин  
         }
-        this.login = login;  // Сохраняем логин
-        this.salt = generateSalt();  // Генерируем случайную соль
-        this.passwordHash = hashPassword(password, salt);  // Хешируем пароль с солью
-    }
 
     // Геттер для логина пользователя
     public String getLogin() {
@@ -77,6 +86,7 @@ class User {
         byte[] salt = Base64.getDecoder().decode(parts[1]);
         byte[] passwordHash = Base64.getDecoder().decode(parts[2]);
         
+        // Пустой пароль для восстановления
         User user = new User(login, ""); 
         user.salt = salt;
         user.passwordHash = passwordHash;
@@ -90,6 +100,8 @@ class User {
             return false;
         }
         // Регулярное выражение для проверки различных категорий символов
+        // Pattern - создание шаблона регулярного выражения
+        // Matcher - проверка строки на соответствие шаблону
         Pattern pattern = Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!$#%]).{8,}$");
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
@@ -101,6 +113,29 @@ class UserDatabase {
     private static final String FILE_NAME = "users.txt";  // Файл хранения пользователей
     private HashMap<String, User> users = new HashMap<>();  // Хранилище пользователей (ключ - логин)
 
+    // Конструктор, который загружает пользователей из файла при создании объекта
+    public UserDatabase() {
+        try {
+            loadUsers();  // Загружаем пользователей из файла
+        } catch (IOException | NoSuchAlgorithmException e) {
+            System.out.println("Ошибка загрузки пользователей: " + e.getMessage());
+        }
+    }    
+
+    // Загрузка пользователей из файла
+    private void loadUsers() throws IOException, NoSuchAlgorithmException {
+        File file = new File(FILE_NAME);
+        if (file.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    User user = User.fromFileString(line);  // Восстановление пользователя из строки
+                    users.put(user.getLogin(), user);  // Добавляем в коллекцию
+                }
+            }
+        }
+    }
+
     // Регистрация нового пользователя
     public void register(String login, String password, String confirmPassword) throws Exception {
         if (users.containsKey(login)) {
@@ -108,6 +143,9 @@ class UserDatabase {
         }
         if (!password.equals(confirmPassword)) {
             throw new Exception("Пароли не совпадают");
+        }
+        if (password.isEmpty()) {
+            throw new Exception("Пароль не может быть пустым");
         }
         users.put(login, new User(login, password));
         saveUsers();
@@ -187,6 +225,9 @@ public class AuthEngine {
                     case 4 -> {
                         System.out.println("Выход...");
                         running = false;
+                    }
+                    default -> {
+                        System.out.println("Ошибка: Введите число от 1 до 4.");
                     }
                 }
             } catch (Exception e) {
