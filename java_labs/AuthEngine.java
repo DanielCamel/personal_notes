@@ -74,6 +74,7 @@ class User {
     // Преобразует объект в строку для сохранения в файл
     public String toFileString() {
         return login + ":" + Base64.getEncoder().encodeToString(salt) + ":" + Base64.getEncoder().encodeToString(passwordHash);
+        // return login + ":" + salt + ":" + passwordHash;
     }
 
     // Восстанавливает объект User из строки (считанной из файла)
