@@ -1,3 +1,5 @@
+package ЛР3;
+
 import java.io.*;  // Импорт классов для работы с файлами
 import java.nio.charset.StandardCharsets;  // Кодировка UTF-8
 import java.security.*;  // Криптографические алгоритмы (пр.,SHA-512)

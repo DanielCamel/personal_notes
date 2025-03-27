@@ -1,3 +1,5 @@
+package ЛР1;
+
 class lab1 {
     public static void main(String[] args) {
         // Начинаем с самой внутренней части
